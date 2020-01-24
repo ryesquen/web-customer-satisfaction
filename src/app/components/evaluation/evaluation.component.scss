@@ -1,0 +1,54 @@
+.grilla.active {
+  filter: blur(20px);
+  pointer-events: none;
+  user-select: none;
+}
+
+table {
+  width: 80vw;
+}
+
+.center {
+  text-align: center;
+  padding: 10px;
+}
+
+.popup {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.5s;
+  padding: 20px;
+}
+
+.popup.active {
+  top: 52%;
+  visibility: visible;
+  opacity: 1;
+  transition: 0.5s;
+}
+
+.btn {
+  cursor: pointer;
+  text-decoration: none;
+  padding: 10px;
+  margin: 0 5px;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #1883ba;
+  border-radius: 6px;
+  border-style: none;
+  text-align: center;
+}
+
+.color {
+  color: #757575;
+}
+
+.items-30 {
+  width: 30vw;
+}
