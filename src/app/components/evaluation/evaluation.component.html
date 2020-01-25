@@ -1,18 +1,21 @@
-<div class="center">
-    <input class="btn" (click)="EditarEvaluacion('')" type="button" value="Registrar Evaluación">
-</div>
 <div #blur class="grilla">
+    <div class="center">
+        <input class="btn" (click)="EditarEvaluacion('')" type="button" value="Registrar Evaluación">
+    </div>
     <div class="filter">
-        <mat-form-field>
-            <input matInput [matDatepicker]="picker" placeholder="Fecha Inicio">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput [matDatepicker]="picker2" placeholder="Fecha Fin">
-            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-            <mat-datepicker #picker2></mat-datepicker>
-        </mat-form-field>
+        <form [formGroup]="evaluationForm2" (ngSubmit)="ConsultarEvaluaciones(evaluationForm2.value)">
+            <mat-form-field>
+                <input matInput [matDatepicker]="picker" placeholder="Fecha Inicio" formControlName="fechaInicio">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput [matDatepicker]="picker2" placeholder="Fecha Fin" formControlName="fechaFin">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+            <button [disabled]="evaluationForm2.invalid" class="btn" type="submit">Consultar</button>
+        </form>
     </div>
     <div>
         <table mat-table [dataSource]="dataSource">

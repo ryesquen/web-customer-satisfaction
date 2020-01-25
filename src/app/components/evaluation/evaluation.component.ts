@@ -21,6 +21,7 @@ export class EvaluationComponent implements OnInit {
   @ViewChild('popup') popup: ElementRef;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator
   evaluationForm: FormGroup
+  evaluationForm2: FormGroup
   nuevo = false
 
   constructor(
@@ -30,7 +31,15 @@ export class EvaluationComponent implements OnInit {
 
   ngOnInit() {
     this.evaluationFormConfig()
+    this.evaluationForm2Config()
     this.MostrarEvaluaciones()
+  }
+
+  evaluationForm2Config() {
+    this.evaluationForm2 = this.builder.group({
+      fechaInicio: [''],
+      fechaFin: ['']
+    })
   }
 
   evaluationFormConfig() {
@@ -121,8 +130,17 @@ export class EvaluationComponent implements OnInit {
         this.configurarModal()
       })
     }
+  }
 
-
-
+  ConsultarEvaluaciones(values: any) {
+    console.log(values)
+    let i = values.fechaInicio.toLocaleDateString().split('/')
+    let f = values.fechaFin.toLocaleDateString().split('/')
+    let inicio = `${i[2]}-${i[1]}-${i[0]}`
+    let fin = `${f[2]}-${f[1]}-${f[0]}`
+    this.evaluationService.ListarEvaluacionesRangoFecha(inicio, fin).subscribe(res => {
+      this.dataSource = new MatTableDataSource<evaluation>(res)
+      this.dataSource.paginator = this.paginator
+    })
   }
 }

@@ -18,6 +18,10 @@ export class EvaluationService {
     return this.httpClient.get<evaluation[]>(`${this.urlBase}`)
   }
 
+  ListarEvaluacionesRangoFecha(fechaInicio: string, fechaFin: string): Observable<evaluation[]> {
+    return this.httpClient.get<evaluation[]>(`${this.urlBase}GetAllByDateRange?begin=${fechaInicio}&end=${fechaFin}`)
+  }
+
   AgregarEvaluacion(procesarEvaluacionRequest: ProcesarEvaluacionRequest): Observable<Response> {
     let headers = new HttpHeaders({
       'Content-Type': 'application/json'
