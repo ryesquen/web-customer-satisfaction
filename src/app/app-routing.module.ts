@@ -4,6 +4,11 @@ import { EvaluationComponent } from './components/evaluation/evaluation.componen
 
 const routes: Routes = [
   {
+    path: '',
+    redirectTo: '/evaluation',
+    pathMatch: 'full'
+  },
+  {
     path: 'evaluation',
     component: EvaluationComponent
   }

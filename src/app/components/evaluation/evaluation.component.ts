@@ -45,27 +45,44 @@ export class EvaluationComponent implements OnInit {
   evaluationFormConfig() {
     this.evaluationForm = this.builder.group({
       id: [''],
-      email: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       nombres: [''],
       apellidos: [''],
-      calificacion: ['', Validators.required]
+      calificacion: ['', [Validators.required, Validators.maxLength(2)]]
     })
   }
 
   MostrarEvaluaciones() {
-    this.evaluationService.ListarEvaluaciones().subscribe(res => {
-      this.dataSource = new MatTableDataSource<evaluation>(res)
-      this.dataSource.paginator = this.paginator
-    })
-    // this.evaluationService.ListarEvaluacionesSoap().subscribe(res => {
-    //   console.log(res)
-    // },err=>{
-    //   console.warn(err);
+    // this.evaluationService.ListarEvaluaciones().subscribe(res => {
+    //   this.dataSource = new MatTableDataSource<evaluation>(res)
+    //   this.dataSource.paginator = this.paginator
     // })
+    this.evaluationService.ListarEvaluacionesSoap().subscribe(res => {
+      // console.log(res);
+      let doc = new DOMParser().parseFromString(res, 'text/xml');
+      let valueXML = doc.getElementsByTagName('GetAllSoapResult');
+      let temps = valueXML[0].children;
+      let temp;
+      let list = [];
+      let obj;
+      for (let i = 0; i < temps.length; i++) {
+        temp = temps[i].children;
+        obj = {};
+        for (let j = 0; j < temp.length; j++) {
+          let property = temp[j];
+
+          obj[property.localName] = property.innerHTML;
+        }
+        list.push(obj);
+      }
+      // console.log(list);
+      this.dataSource = new MatTableDataSource<evaluation>(list);
+      this.dataSource.paginator = this.paginator;
+    });
   }
 
   EditarEvaluacion(e: any) {
-    console.log(e)
+    // console.log(e)
     this.LimpiarModal()
     if (e !== '') {
       this.nuevo = false
@@ -116,15 +133,15 @@ export class EvaluationComponent implements OnInit {
     procesarEvaluacionRequest.email = values.email
     procesarEvaluacionRequest.firstname = values.nombres
     procesarEvaluacionRequest.lastname = values.apellidos
-    procesarEvaluacionRequest.qualification = values.calificacion
+    procesarEvaluacionRequest.qualification = Number(values.calificacion)
     if (this.nuevo) {
       this.evaluationService.AgregarEvaluacion(procesarEvaluacionRequest).subscribe(res => {
         this.MostrarEvaluaciones()
         this.configurarModal()
       })
     } else {
-      procesarEvaluacionRequest.id = values.id
-      console.log(procesarEvaluacionRequest)
+      procesarEvaluacionRequest.id = Number(values.id)
+      // console.log(procesarEvaluacionRequest)
       this.evaluationService.EditarEvaluacion(procesarEvaluacionRequest).subscribe(res => {
         this.MostrarEvaluaciones()
         this.configurarModal()
@@ -133,7 +150,7 @@ export class EvaluationComponent implements OnInit {
   }
 
   ConsultarEvaluaciones(values: any) {
-    console.log(values)
+    // console.log(values)
     let i = values.fechaInicio.toLocaleDateString().split('/')
     let f = values.fechaFin.toLocaleDateString().split('/')
     let inicio = `${i[2]}-${i[1]}-${i[0]}`

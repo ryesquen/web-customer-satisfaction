@@ -36,9 +36,11 @@ export class EvaluationService {
     return this.httpClient.put<Response>(`${this.urlBase}${procesarEvaluacionRequest.id.toString()}`, procesarEvaluacionRequest, { headers })
   }
 
-  ListarEvaluacionesSoap(): Observable<any> {
+  ListarEvaluacionesSoap(): any {
     let headers = new HttpHeaders({
-      'Content-Type': 'text/xml'
+      'type': 'POST',
+      'Content-Type': 'text/xml; charset=\"utf-8\"',
+      'dataType': 'xml'
     })
     let body = `<?xml version="1.0" encoding="utf-8"?>
     <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
@@ -47,7 +49,7 @@ export class EvaluationService {
         </GetAllSoap>
       </soap:Body>
     </soap:Envelope>`
-    return this.httpClient.post<Response>(`${this.urlBaseSoap}`, body, { headers })
+    return this.httpClient.post(`${this.urlBaseSoap}`, body, { headers, responseType: 'text' })
   }
 
 
